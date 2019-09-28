@@ -22,14 +22,29 @@ public class MainActivity extends AppCompatActivity {
         ) {
             @Override
             public void onClick(View view) {
-                toggleEditTextField();
+                toggleEditTextField(!editText.isFocusable());
             }
         });
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if (!this.editText.isFocusable()) {
+            outState.putBoolean("editTextDisabled", true);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedState) {
+        super.onRestoreInstanceState(savedState);
+        if (savedState.getBoolean("editTextDisabled")) {
+            toggleEditTextField(false);
+        }
+    }
+
     // Disables or enables editText field.
-    private void toggleEditTextField() {
-        boolean setState = !editText.isFocusable();
+    private void toggleEditTextField(Boolean setState) {
         this.editText.setFocusable(setState);
         this.editText.setFocusableInTouchMode(setState);
         this.editText.setEnabled(setState);
