@@ -29,14 +29,19 @@ After this implement a general solution of your choice to save the state of the 
 public class MainActivity extends AppCompatActivity {
     Button buttonToggle;
     EditText editText;
+    StatePreserver statePreserver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        statePreserver = new StatePreserver();
 
         // Get views
         this.buttonToggle = findViewById(R.id.buttonToggle);
         this.editText = findViewById(R.id.editText);
+
+        // Add views that need their state to be preserved
+        statePreserver.addView(editText);
 
         // toggle editText on and off
         buttonToggle.setOnClickListener(new View.OnClickListener(
@@ -51,20 +56,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        // Saves editText State
-        if (!this.editText.isFocusable()) {
-            outState.putBoolean("editTextDisabled", true);
-        }
         super.onSaveInstanceState(outState);
+        // Saves view state after rotation etc.
+        this.statePreserver.saveViewsState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedState) {
         super.onRestoreInstanceState(savedState);
-        // restores editText State
-        if (savedState.getBoolean("editTextDisabled")) {
-            toggleEditTextField(false);
-        }
+        // restores views state after rotation etc.
+        this.statePreserver.restoreViewsState(savedState);
     }
 
     // Disables or enables editText field.
