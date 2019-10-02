@@ -7,8 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.ArrayList;
-
 /*
 * Create an application which shows a splash screen when starting.
 * The screen shows the name of the application and the logo of the application in the middle
@@ -29,6 +27,8 @@ After this implement a general solution of your choice to save the state of the 
 public class MainActivity extends AppCompatActivity {
     Button buttonToggle;
     EditText editText;
+    EditText editText2;
+    EditText editText3;
     StatePreserver statePreserver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,16 +39,26 @@ public class MainActivity extends AppCompatActivity {
         // Get views
         this.buttonToggle = findViewById(R.id.buttonToggle);
         this.editText = findViewById(R.id.editText);
+        this.editText2 = findViewById(R.id.editText2);
+        this.editText3 = findViewById(R.id.editText3);
 
-        // Add views that need their state to be preserved
+
+        // Add views that need their disabled state to be preserved
+        // for demo purposes only editText field 1 and 3 are added
         statePreserver.addView(editText);
+        statePreserver.addView(editText3);
+
 
         // toggle editText on and off
         buttonToggle.setOnClickListener(new View.OnClickListener(
         ) {
             @Override
             public void onClick(View view) {
-                toggleEditTextField(!editText.isFocusable());
+                // for demo purposes all the view's state's are toggled but only two of those
+                // preserve state.
+                toggleViewState(!editText.isFocusable(), editText);
+                toggleViewState(!editText2.isFocusable(), editText2);
+                toggleViewState(!editText3.isFocusable(), editText3);
             }
         });
     }
@@ -68,10 +78,10 @@ public class MainActivity extends AppCompatActivity {
         this.statePreserver.restoreViewsState(savedState);
     }
 
-    // Disables or enables editText field.
-    private void toggleEditTextField(Boolean setState) {
-        this.editText.setFocusable(setState);
-        this.editText.setFocusableInTouchMode(setState);
-        this.editText.setEnabled(setState);
+    // Disables or enables view
+    private void toggleViewState(Boolean state, View view) {
+        view.setFocusable(state);
+        view.setFocusableInTouchMode(state);
+        view.setEnabled(state);
     }
 }

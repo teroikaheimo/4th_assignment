@@ -5,7 +5,8 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-/* Preserves disabled state for the views that are added to the views ArrayList.
+/* Preserves views disabled state for focusable, focusableInTouchMode and enabled.
+
 Usage
 1. add views to list.
 2. call saveViewsState in your activity's onSaveInstanceState method.
